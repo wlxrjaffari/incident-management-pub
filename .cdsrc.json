@@ -1,0 +1,12 @@
+{
+  "requires": {
+    "[local-multitenancy]": {
+      "db": {
+        "kind": "sqlite",
+        "impl": "@cap-js/sqlite",
+        "credentials": { "url": "sqlite-local-mtx.db" },
+        "model": ["db", "srv"]
+      }
+    }
+  }
+}

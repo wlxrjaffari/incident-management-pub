@@ -5,6 +5,7 @@
   "dependencies": {
     "@cap-js/hana": "^2",
     "@sap/cds": "^9",
+    "@sap/cds-mtxs": "^3",
     "@sap/xssec": "^4",
     "express": "^4"
   },
@@ -34,18 +35,41 @@
               "roles": [
                 "support"
               ]
+            },
+            "erin": {  
+              "roles": [ 
+                "support"
+              ] 
             }
           }
         }
       },
       "[production]": {
         "db": "hana",
-        "auth": "xsuaa"
+        "auth": "xsuaa",
+        "multitenancy": true
       },
       "destinations": true,
       "html5-runtime": true,
-      "workzone": true
-    }
+      "workzone": true,
+      "[local-multitenancy]": {
+        "multitenancy": true,
+        "db": {
+          "kind": "sqlite",
+          "impl": "@cap-js/sqlite",
+          "credentials": { "url": "sqlite-local-mtx.db" },
+          "model": ["db", "srv"]
+        }
+      },
+      "[with-mtx-sidecar]": {
+        "db": {
+          "kind": "sqlite",
+          "impl": "@cap-js/sqlite",
+          "credentials": { "url": "sqlite-local-mtx.db" }
+        }
+      }
+    },
+    "profile": "with-mtx-sidecar"
   },
   "private": true,
   "workspaces": [
