@@ -11,6 +11,7 @@ build-parameters:
       commands:
         - npm ci
         - npx cds build --production
+
 modules:
   - name: incident-management-srv
     type: nodejs
@@ -38,8 +39,6 @@ modules:
       - name: incident-management-html5-repo-host
         parameters:
           content-target: true
-          config:
-            HTML5Runtime_enabled: true
     build-parameters:
       build-result: app/
       requires:
@@ -47,26 +46,18 @@ modules:
           artifacts:
             - incidents.zip
           target-path: app/
+        - name: incident-management-workzone-cdm
+          artifacts:
+            - cdm.json
+          target-path: app/
     parameters:
       config:
-        HTML5Runtime_enabled: true
-        init_data:
-          instance:
-            existing_destinations_policy: update
-            destinations:
-              - Name: srv-api
-                URL: ~{srv-api/srv-url}
-                Authentication: NoAuthentication
-                Type: HTTP
-                ProxyType: Internet
-                HTML5.ForwardAuthToken: true
-                HTML5.DynamicDestination: true
-
-              - Name: ui5
-                URL: https://ui5.sap.com
-                Authentication: NoAuthentication
-                Type: HTTP
-                ProxyType: Internet
+        destinations:
+        - forwardAuthToken: true
+          name: srv-api
+          url: ~{srv-api/srv-url}
+        - name: ui5
+          url: https://ui5.sap.com
 
   - name: incidentmanagementincidents
     type: html5
@@ -95,6 +86,10 @@ modules:
       - name: incident-management-destination
         parameters:
           content-target: true
+      - name: incident-management-html5-runtime
+        parameters:
+          service-key: 
+            name: incident-management-html5-runtime-service-key
     build-parameters:
       no-source: true
     parameters:
@@ -111,6 +106,13 @@ modules:
               ServiceInstanceName: incident-management-auth
               ServiceKeyName: incident-management-auth-key
               sap.cloud.service: incidentmanagement.service
+        subaccount:
+          existing_destinations_policy: update
+          destinations:
+            - Name: incident-management_cdm
+              ServiceInstanceName: incident-management-html5-runtime
+              ServiceKeyName: incident-management-html5-runtime-service-key
+              URL: https://html5-apps-repo-rt.${default-domain}/applications/cdm/incidentmanagement.service
 
   - name: incident-management-mtx
     type: nodejs
@@ -119,8 +121,6 @@ modules:
       - name: incident-management-auth
       - name: incident-management-db
       - name: incident-management-registry
-      - name: incident-management-destination
-      - name: incident-management-html5-runtime
       - name: incident-management-html5-repo-host
     build-parameters:
       builder: npm-ci
@@ -144,6 +144,14 @@ modules:
       - name: mtx-api
         properties:
           mtx-url: ${default-url}
+
+  - name: incident-management-workzone-cdm
+    type: html5
+    path: workzone
+    build-parameters:
+      build-result: .
+      supported-platforms:
+        []
 
 resources:
   - name: incident-management-auth
@@ -170,18 +178,7 @@ resources:
       service: destination
       service-plan: lite
       config:
-        HTML5Runtime_enabled: true
         init_data:
-          instance:
-            existing_destinations_policy: update
-            destinations:
-              - Name: srv-api
-                URL: ~{srv-api/srv-url}
-                Authentication: NoAuthentication
-                Type: HTTP
-                ProxyType: Internet
-                HTML5.ForwardAuthToken: true
-                HTML5.DynamicDestination: true
           subaccount:
             existing_destinations_policy: update
             destinations:
@@ -191,13 +188,6 @@ resources:
                 ProxyType: Internet
                 URL: https://${org}.launchpad.${default-domain}
                 CEP.HTML5contentprovider: true
-    requires:
-      - name: srv-api
-        group: destinations
-        properties:
-          name: srv-api # must be used in xs-app.json as well
-          url: ~{srv-url}
-          forwardAuthToken: true
 
   - name: incident-management-html5-repo-host
     type: org.cloudfoundry.managed-service

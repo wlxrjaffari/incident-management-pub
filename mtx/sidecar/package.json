@@ -4,6 +4,7 @@
     "@cap-js/hana": "^2",
     "@sap/cds": "^9",
     "@sap/cds-mtxs": "^3",
+    "@sap/xsenv": "^6.1.0",
     "@sap/xssec": "^4",
     "express": "^4"
   },
@@ -24,8 +25,13 @@
         "db": {
           "kind": "sqlite",
           "impl": "@cap-js/sqlite",
-          "credentials": { "url": "../../sqlite-local-mtx.db" },
-          "model": ["../../db", "../../srv"]
+          "credentials": {
+            "url": "../../sqlite-local-mtx.db"
+          },
+          "model": [
+            "../../db",
+            "../../srv"
+          ]
         }
       }
     }

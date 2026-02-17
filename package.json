@@ -36,10 +36,10 @@
                 "support"
               ]
             },
-            "erin": {  
-              "roles": [ 
+            "erin": {
+              "roles": [
                 "support"
-              ] 
+              ]
             }
           }
         }
@@ -49,7 +49,6 @@
         "auth": "xsuaa",
         "multitenancy": true
       },
-      "destinations": true,
       "html5-runtime": true,
       "workzone": true,
       "[local-multitenancy]": {
@@ -57,17 +56,25 @@
         "db": {
           "kind": "sqlite",
           "impl": "@cap-js/sqlite",
-          "credentials": { "url": "sqlite-local-mtx.db" },
-          "model": ["db", "srv"]
+          "credentials": {
+            "url": "sqlite-local-mtx.db"
+          },
+          "model": [
+            "db",
+            "srv"
+          ]
         }
       },
       "[with-mtx-sidecar]": {
         "db": {
           "kind": "sqlite",
           "impl": "@cap-js/sqlite",
-          "credentials": { "url": "sqlite-local-mtx.db" }
+          "credentials": {
+            "url": "sqlite-local-mtx.db"
+          }
         }
-      }
+      },
+      "html5-repo": true
     },
     "profile": "with-mtx-sidecar"
   },
