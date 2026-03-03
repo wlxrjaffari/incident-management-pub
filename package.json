@@ -65,15 +65,6 @@
           ]
         }
       },
-      "[with-mtx-sidecar]": {
-        "db": {
-          "kind": "sqlite",
-          "impl": "@cap-js/sqlite",
-          "credentials": {
-            "url": "sqlite-local-mtx.db"
-          }
-        }
-      },
       "html5-repo": true
     },
     "profile": "with-mtx-sidecar"
