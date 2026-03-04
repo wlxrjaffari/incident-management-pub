@@ -5,6 +5,7 @@
   "dependencies": {
     "@cap-js/hana": "^2",
     "@sap/cds": "^9",
+    "@sap/cds-mtxs": "^3",
     "@sap/xssec": "^4",
     "express": "^4"
   },
@@ -28,9 +29,15 @@
             "alice": {
               "roles": [
                 "support"
-              ]
+              ],
+              "tenant": "t3"
             },
             "bob": {
+              "roles": [
+                "support"
+              ]
+            },
+            "erin": {
               "roles": [
                 "support"
               ]
@@ -40,16 +47,30 @@
       },
       "[production]": {
         "db": "hana",
-        "auth": "xsuaa"
+        "auth": "xsuaa",
+        "multitenancy": true
       },
-      "destinations": true,
+      "destinations": false,
       "html5-runtime": true,
-      "workzone": true
+      "workzone": false,
+      "[local-multitenancy]": {
+        "multitenancy": true
+      },
+      "[with-mtx-sidecar]": {
+        "db": {
+          "kind": "sqlite",
+          "impl": "@cap-js/sqlite",
+          "credentials": {
+            "url": "sqlite-local-mtx.db"
+          }
+        }
+      },
+      "html5-repo": true
     }
   },
   "private": true,
   "workspaces": [
-    "app/*"
+    "mtx/sidecar"
   ],
   "sapux": [
     "app/incidents"
